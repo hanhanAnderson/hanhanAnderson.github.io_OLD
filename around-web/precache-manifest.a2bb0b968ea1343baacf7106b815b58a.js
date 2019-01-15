@@ -12,15 +12,15 @@ self.__precacheManifest = [
     "url": "/around-web/static/js/runtime~main.fed49077.js"
   },
   {
-    "revision": "916bef44a2fa766b31e9",
-    "url": "/around-web/static/js/main.916bef44.chunk.js"
+    "revision": "438fa4aa0e11e163a0ee",
+    "url": "/around-web/static/js/main.438fa4aa.chunk.js"
   },
   {
     "revision": "00c232516d772dfcf918",
     "url": "/around-web/static/js/1.00c23251.chunk.js"
   },
   {
-    "revision": "916bef44a2fa766b31e9",
+    "revision": "438fa4aa0e11e163a0ee",
     "url": "/around-web/static/css/main.b4f4f8e6.chunk.css"
   },
   {
@@ -28,7 +28,7 @@ self.__precacheManifest = [
     "url": "/around-web/static/css/1.893a2ed3.chunk.css"
   },
   {
-    "revision": "2b713ee8626c88e5c1605e616731f510",
+    "revision": "7f4e65d6c430e0a2322bf662860c69df",
     "url": "/around-web/index.html"
   }
 ];

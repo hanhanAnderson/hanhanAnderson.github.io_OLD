@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[连接远程JupyterNotebook]]></title>
+    <url>%2FMachineLearning%2F%E8%BF%9E%E6%8E%A5%E8%BF%9C%E7%A8%8BJupyterNotebook%2F</url>
+    <content type="text"><![CDATA[连接远程JupyterNotebook实验室搞了个新的server有四个RTX2080Ti 当然要来玩玩啦设置好用户之后就可以ssh连接了 装好anaconda pytorch 远程连接jupyter notebook网址还是localhost 但是带了token, 403. 解决方法首先在server上（ssh里）执行1jupyter notebook --no-browser --port=8889 然后本地1ssh -N -f -L localhost:8888:localhost:8889 remote_user@remote_host 映射本地的8888到server的8889打开本地的 http://localhost:8888/ 就可以啦 如果没有设置jupyter notebook的密码 会被要求输入token 就是之前网址里的就可以啦]]></content>
+      <categories>
+        <category>MachineLearning</category>
+      </categories>
+      <tags>
+        <tag>MachineLearning</tag>
+        <tag>Pytorch</tag>
+        <tag>Tips</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Pytorch速成笔记 I]]></title>
     <url>%2FMachineLearning%2FPytorch%E9%80%9F%E6%88%90%E7%AC%94%E8%AE%B0-I%2F</url>
     <content type="text"><![CDATA[Pytorch速成笔记 I开个新坑 用来整理之前pytorch的笔记和相关notebook]]></content>

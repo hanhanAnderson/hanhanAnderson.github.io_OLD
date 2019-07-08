@@ -373,6 +373,212 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hanhananderson.github.io/MachineLearning/连接远程JupyterNotebook/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Anderson Hanhan">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/MachineLearning/连接远程JupyterNotebook/" class="post-title-link" itemprop="url">连接远程JupyterNotebook</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-08 13:45:07 / Modified: 13:52:51" itemprop="dateCreated datePublished" datetime="2019-07-08T13:45:07-04:00">2019-07-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/MachineLearning/" itemprop="url" rel="index"><span itemprop="name">MachineLearning</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">Comments: </span>
+                <a href="/MachineLearning/连接远程JupyterNotebook/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="MachineLearning/连接远程JupyterNotebook/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Symbols count in article: </span>
+                
+                <span title="Symbols count in article">382</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">1 mins.</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="连接远程JupyterNotebook"><a href="#连接远程JupyterNotebook" class="headerlink" title="连接远程JupyterNotebook"></a>连接远程JupyterNotebook</h1><h2 id="实验室搞了个新的server有四个RTX2080Ti-当然要来玩玩啦"><a href="#实验室搞了个新的server有四个RTX2080Ti-当然要来玩玩啦" class="headerlink" title="实验室搞了个新的server有四个RTX2080Ti 当然要来玩玩啦"></a>实验室搞了个新的server有四个RTX2080Ti 当然要来玩玩啦</h2><p>设置好用户之后就可以ssh连接了 装好anaconda pytorch 远程连接jupyter notebook网址还是localhost 但是带了token, 403.</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>首先在server上（ssh里）执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jupyter notebook --no-browser --port=8889</span><br></pre></td></tr></table></figure></p>
+<p>然后本地<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -N -f -L localhost:8888:localhost:8889 remote_user@remote_host</span><br></pre></td></tr></table></figure></p>
+<p>映射本地的8888到server的8889<br>打开本地的 <a href="http://localhost:8888/" target="_blank" rel="noopener">http://localhost:8888/</a> 就可以啦</p>
+<p>如果没有设置jupyter notebook的密码 会被要求输入token 就是之前网址里的就可以啦</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://hanhananderson.github.io/MachineLearning/Pytorch速成笔记-I/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -866,7 +1072,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-05-03 12:29:57" itemprop="dateModified" datetime="2019-05-03T12:29:57-04:00">2019-05-03</time>
+                <time title="Modified: 2019-07-08 12:59:26" itemprop="dateModified" datetime="2019-07-08T12:59:26-04:00">2019-07-08</time>
               
             
           </span>
@@ -961,7 +1167,7 @@
       
         
           
-            <h1 id="碎碎念开始。。"><a href="#碎碎念开始。。" class="headerlink" title="碎碎念开始。。"></a>碎碎念开始。。</h1><h2 id="First-Blog"><a href="#First-Blog" class="headerlink" title="First Blog"></a>First Blog</h2><p>本来之前是有个WordPress博客的 但是后来<a href="https://www.zhihu.com/question/269698303,张朝权跑路" target="_blank" rel="noopener">张朝权跑路</a>了 服务器就没了 反正本来也都是碎碎念 想想自己以后还要继续PhD 最近糟心的事也挺多的 就恢复博客以后写点日常和辣鸡技术总结吧</p>
+            <h1 id="碎碎念开始。。"><a href="#碎碎念开始。。" class="headerlink" title="碎碎念开始。。"></a>碎碎念开始。。</h1><h2 id="First-Blog"><a href="#First-Blog" class="headerlink" title="First Blog"></a>First Blog</h2><p>本来之前是有个WordPress博客的 但是后来<a href="https://www.zhihu.com/question/269698303" target="_blank" rel="noopener">张朝权跑路</a>了 服务器就没了 反正本来也都是碎碎念 想想自己以后还要继续PhD 最近糟心的事也挺多的 就恢复博客以后写点日常和辣鸡技术总结吧</p>
 <p>### </p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fmt.println(<span class="string">"hello, world!"</span>)</span><br></pre></td></tr></table></figure>
 
@@ -1049,7 +1255,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -1105,7 +1311,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -1226,7 +1434,7 @@
     
       <span class="post-meta-item-text">Reading time total &asymp;</span>
     
-    <span title="Reading time total">5 mins.</span>
+    <span title="Reading time total">6 mins.</span>
   
 </div>
 

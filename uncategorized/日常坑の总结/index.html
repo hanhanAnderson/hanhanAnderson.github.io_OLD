@@ -96,18 +96,17 @@
 
 
 
-  <meta name="description" content="连接远程JupyterNotebook实验室搞了个新的server有四个RTX2080Ti 当然要来玩玩啦设置好用户之后就可以ssh连接了 装好anaconda pytorch 远程连接jupyter notebook网址还是localhost 但是带了token, 403. 解决方法首先在server上（ssh里）执行1jupyter notebook --no-browser --port=8">
-<meta name="keywords" content="MachineLearning,Pytorch,Tips">
+  <meta name="description" content="开个新帖总结日常遇到的坑吧Pytorch 报错RuntimeError: Found 0 images in subfolders of: ./data假如TrainingData都是图片放在一个文件夹里，使用train_dataset = datasets.ImageFolder(train_path, transform)读取数据的时候可能会报错：Found 0 images in subfo">
 <meta property="og:type" content="article">
-<meta property="og:title" content="连接远程JupyterNotebook">
-<meta property="og:url" content="https://hanhananderson.github.io/MachineLearning/连接远程JupyterNotebook/index.html">
+<meta property="og:title" content="日常坑の总结">
+<meta property="og:url" content="https://hanhananderson.github.io/uncategorized/日常坑の总结/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="连接远程JupyterNotebook实验室搞了个新的server有四个RTX2080Ti 当然要来玩玩啦设置好用户之后就可以ssh连接了 装好anaconda pytorch 远程连接jupyter notebook网址还是localhost 但是带了token, 403. 解决方法首先在server上（ssh里）执行1jupyter notebook --no-browser --port=8">
+<meta property="og:description" content="开个新帖总结日常遇到的坑吧Pytorch 报错RuntimeError: Found 0 images in subfolders of: ./data假如TrainingData都是图片放在一个文件夹里，使用train_dataset = datasets.ImageFolder(train_path, transform)读取数据的时候可能会报错：Found 0 images in subfo">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-09-25T14:59:50.152Z">
+<meta property="og:updated_time" content="2019-09-30T18:10:25.409Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="连接远程JupyterNotebook">
-<meta name="twitter:description" content="连接远程JupyterNotebook实验室搞了个新的server有四个RTX2080Ti 当然要来玩玩啦设置好用户之后就可以ssh连接了 装好anaconda pytorch 远程连接jupyter notebook网址还是localhost 但是带了token, 403. 解决方法首先在server上（ssh里）执行1jupyter notebook --no-browser --port=8">
+<meta name="twitter:title" content="日常坑の总结">
+<meta name="twitter:description" content="开个新帖总结日常遇到的坑吧Pytorch 报错RuntimeError: Found 0 images in subfolders of: ./data假如TrainingData都是图片放在一个文件夹里，使用train_dataset = datasets.ImageFolder(train_path, transform)读取数据的时候可能会报错：Found 0 images in subfo">
 
 
 
@@ -115,7 +114,7 @@
 
   
   
-  <link rel="canonical" href="https://hanhananderson.github.io/MachineLearning/连接远程JupyterNotebook/">
+  <link rel="canonical" href="https://hanhananderson.github.io/uncategorized/日常坑の总结/">
 
 
 
@@ -125,7 +124,7 @@
   };
 </script>
 
-  <title>连接远程JupyterNotebook | Hexo</title>
+  <title>日常坑の总结 | Hexo</title>
   
 
 
@@ -377,7 +376,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hanhananderson.github.io/MachineLearning/连接远程JupyterNotebook/">
+    <link itemprop="mainEntityOfPage" href="https://hanhananderson.github.io/uncategorized/日常坑の总结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Anderson Hanhan">
@@ -394,7 +393,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">连接远程JupyterNotebook
+          <h1 class="post-title" itemprop="name headline">日常坑の总结
 
               
             
@@ -420,46 +419,16 @@
                 
               
 
-              <time title="Created: 2019-07-08 13:45:07" itemprop="dateCreated datePublished" datetime="2019-07-08T13:45:07-04:00">2019-07-08</time>
+              <time title="Created: 2019-09-30 13:58:04 / Modified: 14:10:25" itemprop="dateCreated datePublished" datetime="2019-09-30T13:58:04-04:00">2019-09-30</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-09-25 10:59:50" itemprop="dateModified" datetime="2019-09-25T10:59:50-04:00">2019-09-25</time>
               
             
           </span>
 
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/MachineLearning/" itemprop="url" rel="index"><span itemprop="name">MachineLearning</span></a></span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -473,8 +442,8 @@
                 </span>
             
                 <span class="post-meta-item-text">Comments: </span>
-                <a href="/MachineLearning/连接远程JupyterNotebook/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="MachineLearning/连接远程JupyterNotebook/" itemprop="commentCount"></span>
+                <a href="/uncategorized/日常坑の总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="uncategorized/日常坑の总结/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -496,7 +465,7 @@
                 
                   <span class="post-meta-item-text">Symbols count in article: </span>
                 
-                <span title="Symbols count in article">479</span>
+                <span title="Symbols count in article">467</span>
               
 
               
@@ -530,12 +499,9 @@
       
 
       
-        <h1 id="连接远程JupyterNotebook"><a href="#连接远程JupyterNotebook" class="headerlink" title="连接远程JupyterNotebook"></a>连接远程JupyterNotebook</h1><h2 id="实验室搞了个新的server有四个RTX2080Ti-当然要来玩玩啦"><a href="#实验室搞了个新的server有四个RTX2080Ti-当然要来玩玩啦" class="headerlink" title="实验室搞了个新的server有四个RTX2080Ti 当然要来玩玩啦"></a>实验室搞了个新的server有四个RTX2080Ti 当然要来玩玩啦</h2><p>设置好用户之后就可以ssh连接了 装好anaconda pytorch 远程连接jupyter notebook网址还是localhost 但是带了token, 403.</p>
-<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>首先在server上（ssh里）执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jupyter notebook --no-browser --port=8889</span><br></pre></td></tr></table></figure></p>
-<p>然后本地<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -N -f -L localhost:8888:localhost:8889 remote_user@remote_host</span><br></pre></td></tr></table></figure></p>
-<p>映射server的8889到本地的8888<br>打开本地的 <a href="http://localhost:8888/" target="_blank" rel="noopener">http://localhost:8888/</a> 就可以啦</p>
-<p>如果没有设置jupyter notebook的密码 会被要求输入token 就是之前网址里的就可以啦</p>
-<p>如果此时还是403 可能是防火墙设置问题 换个端口到1234试试~<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh username@address_of_remote -L127.0.0.1:1234:127.0.0.1:8888</span><br></pre></td></tr></table></figure></p>
+        <h1 id="开个新帖总结日常遇到的坑吧"><a href="#开个新帖总结日常遇到的坑吧" class="headerlink" title="开个新帖总结日常遇到的坑吧"></a>开个新帖总结日常遇到的坑吧</h1><h2 id="Pytorch-报错RuntimeError-Found-0-images-in-subfolders-of-data"><a href="#Pytorch-报错RuntimeError-Found-0-images-in-subfolders-of-data" class="headerlink" title="Pytorch 报错RuntimeError: Found 0 images in subfolders of: ./data"></a>Pytorch 报错RuntimeError: Found 0 images in subfolders of: ./data</h2><p>假如TrainingData都是图片放在一个文件夹里，使用<br><code>train_dataset = datasets.ImageFolder(train_path, transform)</code>读取数据的时候可能会报错：<br><code>Found 0 images in subfolders of: ./data</code><br>因为通常图片类的trainingData都是在几个子文件夹里一起放到，解决方法就是再创建一个子文件夹放进去就可以了，操作方法👇</p>
+<h2 id="使用mv-dataset-提示Argument-list-too-long"><a href="#使用mv-dataset-提示Argument-list-too-long" class="headerlink" title="使用mv *.* ./dataset/提示Argument list too long"></a>使用<code>mv *.* ./dataset/</code>提示Argument list too long</h2><p>一个文件夹里的文件太多的时候用mv和cp等等指令可能提示文件太多Argument list too long</p>
+<p>解决方法：<br><code>find dataset/ -name &quot;*.jpg&quot; -exec cp {} dataset/dataset \;</code> 即可 要带上结尾的\;转义</p>
 
       
     </div>
@@ -570,7 +536,7 @@
   <li class="post-copyright-link">
     <strong>Post link: </strong>
     
-    <a href="https://hanhananderson.github.io/MachineLearning/连接远程JupyterNotebook/" title="连接远程JupyterNotebook">https://hanhananderson.github.io/MachineLearning/连接远程JupyterNotebook/</a>
+    <a href="https://hanhananderson.github.io/uncategorized/日常坑の总结/" title="日常坑の总结">https://hanhananderson.github.io/uncategorized/日常坑の总结/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.</li>
@@ -581,16 +547,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/MachineLearning/" rel="tag"># MachineLearning</a>
-          
-            <a href="/tags/Pytorch/" rel="tag"># Pytorch</a>
-          
-            <a href="/tags/Tips/" rel="tag"># Tips</a>
-          
-        </div>
-      
 
       
       
@@ -600,8 +556,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/MachineLearning/Pytorch速成笔记-I/" rel="next" title="Pytorch速成笔记 I">
-                <i class="fa fa-chevron-left"></i> Pytorch速成笔记 I
+              <a href="/MachineLearning/连接远程JupyterNotebook/" rel="next" title="连接远程JupyterNotebook">
+                <i class="fa fa-chevron-left"></i> 连接远程JupyterNotebook
               </a>
             
           </div>
@@ -609,10 +565,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/uncategorized/日常坑の总结/" rel="prev" title="日常坑の总结">
-                日常坑の总结 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -833,7 +785,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#连接远程JupyterNotebook"><span class="nav-number">1.</span> <span class="nav-text">连接远程JupyterNotebook</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实验室搞了个新的server有四个RTX2080Ti-当然要来玩玩啦"><span class="nav-number">1.1.</span> <span class="nav-text">实验室搞了个新的server有四个RTX2080Ti 当然要来玩玩啦</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方法"><span class="nav-number">1.2.</span> <span class="nav-text">解决方法</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#开个新帖总结日常遇到的坑吧"><span class="nav-number">1.</span> <span class="nav-text">开个新帖总结日常遇到的坑吧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch-报错RuntimeError-Found-0-images-in-subfolders-of-data"><span class="nav-number">1.1.</span> <span class="nav-text">Pytorch 报错RuntimeError: Found 0 images in subfolders of: ./data</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用mv-dataset-提示Argument-list-too-long"><span class="nav-number">1.2.</span> <span class="nav-text">使用mv *.* ./dataset/提示Argument list too long</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -1014,9 +966,9 @@
 
 <script>
   var disqus_config = function() {
-    this.page.url = "https://hanhananderson.github.io/MachineLearning/连接远程JupyterNotebook/";
-    this.page.identifier = "MachineLearning/连接远程JupyterNotebook/";
-    this.page.title = '连接远程JupyterNotebook';
+    this.page.url = "https://hanhananderson.github.io/uncategorized/日常坑の总结/";
+    this.page.identifier = "uncategorized/日常坑の总结/";
+    this.page.title = '日常坑の总结';
     };
   function loadComments() {
     var d = document, s = d.createElement('script');

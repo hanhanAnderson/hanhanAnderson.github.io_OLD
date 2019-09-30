@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[日常坑の总结]]></title>
+    <url>%2Funcategorized%2F%E6%97%A5%E5%B8%B8%E5%9D%91%E3%81%AE%E6%80%BB%E7%BB%93%2F</url>
+    <content type="text"><![CDATA[开个新帖总结日常遇到的坑吧Pytorch 报错RuntimeError: Found 0 images in subfolders of: ./data假如TrainingData都是图片放在一个文件夹里，使用train_dataset = datasets.ImageFolder(train_path, transform)读取数据的时候可能会报错：Found 0 images in subfolders of: ./data因为通常图片类的trainingData都是在几个子文件夹里一起放到，解决方法就是再创建一个子文件夹放进去就可以了，操作方法👇 使用mv *.* ./dataset/提示Argument list too long一个文件夹里的文件太多的时候用mv和cp等等指令可能提示文件太多Argument list too long 解决方法：find dataset/ -name &quot;*.jpg&quot; -exec cp {} dataset/dataset \; 即可 要带上结尾的\;转义]]></content>
+  </entry>
+  <entry>
     <title><![CDATA[连接远程JupyterNotebook]]></title>
     <url>%2FMachineLearning%2F%E8%BF%9E%E6%8E%A5%E8%BF%9C%E7%A8%8BJupyterNotebook%2F</url>
     <content type="text"><![CDATA[连接远程JupyterNotebook实验室搞了个新的server有四个RTX2080Ti 当然要来玩玩啦设置好用户之后就可以ssh连接了 装好anaconda pytorch 远程连接jupyter notebook网址还是localhost 但是带了token, 403. 解决方法首先在server上（ssh里）执行1jupyter notebook --no-browser --port=8889 然后本地1ssh -N -f -L localhost:8888:localhost:8889 remote_user@remote_host 映射server的8889到本地的8888打开本地的 http://localhost:8888/ 就可以啦 如果没有设置jupyter notebook的密码 会被要求输入token 就是之前网址里的就可以啦 如果此时还是403 可能是防火墙设置问题 换个端口到1234试试~1ssh username@address_of_remote -L127.0.0.1:1234:127.0.0.1:8888]]></content>

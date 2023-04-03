@@ -1,0 +1,3552 @@
+
+um it's really a pleasure to to be here
+
+and to have the chance to tell you a bit
+
+about some of our work on
+
+multi-agent reinforcement learning
+
+so
+
+presumably i don't need to explain to
+
+this audience the importance of
+
+multi-agent systems
+
+but this talk focuses entirely on
+
+cooperative multi-agent systems
+
+and in particular how to do cooperative
+
+multi-agent reinforcement learning
+
+and the cooperative setting is all about
+
+solving coordination problems how to get
+
+a team of agents to work together to
+
+achieve a common goal
+
+[2]
+
+so this setting is important because a
+
+large number of these real-world
+
+multi-agent systems are cooperative like
+
+a team of robots in a warehouse
+
+or they contain subgroups that can be
+
+usefully modeled as such
+
+like a fleet of self-driving cars
+
+sharing public roads with human drivers
+
+[3]
+
+now before we can get into some of the
+
+methods that we've developed we have to
+
+get clear on the exact problem setting
+
+and this is a common source of confusion
+
+because once you depart from the
+
+simplicity of the single agent setting
+
+there's an explosion of possible
+
+settings each with different assumptions
+
+about the agents what they can observe
+
+what actions they can take how they're
+
+rewarded and so on
+
+
+
+
+the setting of this problem is multi-agent and
+
+cooperative as i've already discussed
+
+it's also partially observable which
+
+means each agent has its own private and
+
+partial view of the global state
+
+and as we'll see this turns out to be
+
+crucial because it's this partial
+
+observability that makes the setting
+
+truly multi-agent
+
+in addition
+
+we require that the policies learned by
+
+the agents can be executed in a
+
+decentralized fashion
+
+which means each agent conditions only
+
+on its history of private observations
+
+not those of the other agents
+
+however we assume that the learning
+
+takes place in a simulator or in another
+
+safe setting like a laboratory
+
+such that the learning process itself
+
+can be centralized so the agents they
+
+can share parameters observations
+
+gradients whatever they want there are
+
+no rules as long as the resulting
+
+policies are amenable to decentralized
+
+execution
+
+[MDP]
+
+so to formalize this problem setting
+
+let's start with the basics the single
+
+agent mvp i'll assume that you're
+
+familiar with it but let me just note
+
+that in our notation the action is
+
+denoted with u
+
+um as a will later be used to refer to
+
+the agent
+
+so we have transitions and reward
+
+functions the return is a discounted sum
+
+of rewards and value functions represent
+
+conditional expected returns
+
+okay
+
+[MAMDP]
+
+now the simplest way to make this
+
+setting multi-agent is to just add a
+
+separate action space for each agent
+
+so every agent sees the global state but
+
+it can select its own action
+
+so a in the superscript here indicates
+
+which agent is taking the action
+
+the transition and reward functions are
+
+the same as before but now they
+
+condition on the joint action which is a
+
+vector of action choices of each agent
+
+so i'm using bold here to indicate
+
+vectors
+
+now as you may have already noticed
+
+there's nothing fundamentally
+
+multi-agent about the multi-agent mdp
+
+we can think of it as just a single
+
+agent mdp with a factored action space
+
+in other words taking an action means
+
+specifying a whole vector as if a single
+
+ agent was controlling all the
+
+robots or whatever from above
+
+uh so that is why partial observability
+
+is crucial to making the the setting
+
+truly multi-agent
+
+as this can be modeled with a dec and
+
+
+[dec mdp]
+
+
+this can be modeled with a decentralized
+
+partially observable markov decision
+
+process for dec mdp
+
+so in addition to the elements already
+
+introduced we have an observation
+
+function that conditions not only on the
+
+global state but on the agent such that
+
+each agent has in general a different
+
+private and partial view of the world
+
+and due to partial observability the
+
+agents will generally want to condition
+
+on their entire action observation
+
+history tau
+
+and learning aims to produce a set of
+
+decentralized policies in which each
+
+agent doesn't condition on anything
+
+besides his private history
+
+so this constraint can be motivated in
+
+two ways there's what i call the natural
+
+decentralization in which real-world
+
+communication or sensory constraints
+
+require decentralization
+
+but there's also artificial
+
+decentralization in which no such
+
+constraints exist inherently
+
+but we as the designers artificially
+
+impose them in order to make learning
+
+more tractable
+
+by for example forcing each agent to
+
+consider only a local field of view
+
+and of course as i've mentioned we're
+
+performing centralized learning of
+
+decentralized policies
+
+so we can do whatever we like during
+
+training as long as the result is a set
+
+of policies that obey this
+
+decentralization constraint
+
+and i've become a bit of an evangelist
+
+for this setting because a core belief
+
+of mine is that to make
+
+progress on hard problems we have to
+
+make the right assumptions so we're
+
+looking for assumptions that give us a
+
+lot of leverage on the problem but which
+
+still mostly or approximately hold in
+
+the real world
+
+and this assumption meets these criteria
+
+in my opinion we don't deploy robots
+
+tabular roster we train them in the
+
+simulator or in a laboratory first and
+
+centralizing that process is a powerful
+
+tool for learning coordinated behavior
+
+among cooperative agents
+
+[IDQ]
+
+okay so the simplest approach we can
+
+take algorithmically is called
+
+independent learning this was first
+
+proposed as independent q learning way
+
+back in 93
+
+and the idea is that each agent simply
+
+learns independently with its own q
+
+function that conditions on its private
+
+observation history and individual
+
+action
+
+so nothing is centralized there's no
+
+attempt to learn a joint value function
+
+that conditions on the joint action
+
+and each agent essentially treats the
+
+other agents as if they were part of the
+
+environment
+
+of course we can do the same thing with
+
+an actor critic approach where each
+
+agent has its own actor and critic
+
+if we have centralized learning then an
+
+obvious improvement is to share
+
+parameters across agents during learning
+
+which can speed learning and improve
+
+generalization
+
+so the agents can still behave
+
+differently because they receive
+
+different inputs and those inputs can
+
+even include an agent index so the
+
+agents can behave arbitrarily
+
+heterogeneously
+
+now it's natural to ask whether such
+
+learning should still be called
+
+independent
+
+but it is still independent in the
+
+important sense that the value functions
+
+condition only on private observations
+
+and individual actions
+
+with no joint value
+
+functions now obviously this is a naive
+
+approach a key limitation is that
+
+because each agent treats other agents
+
+as part of the environment if those
+
+agents are also learning then the
+
+environment from that agent's
+
+perspective becomes non-stationary and
+
+convergence guarantees go out the window
+
+in addition because there's no attempt
+
+to learn a joint value function the sort
+
+of synergistic value of coordination is
+
+not represented which makes it hard to
+
+learn coordinated behavior
+
+so one way we can do better is to take
+
+an actor critic approach and to
+
+centralize the critic so the critic
+
+conditions on the global state the joint
+
+history maybe even the joint action
+
+and centralizing the critic makes sense
+
+because it's only needed during training
+
+once you deploy you can discard the
+
+critic and just use the policies to act
+
+anything that you discard before
+
+deployment is a great candidate for
+
+centralization
+
+this also makes explicit the motivation
+
+for taking an actor critic approach
+
+because actor critic methods are
+
+appealing anytime you have what i call a
+
+hard greedification problem
+
+that is when finding the greedy action
+
+with respect to the value function is
+
+non-trivial
+
+so the classic example is continuous
+
+action spaces and this is the typical
+
+setting in which actor critic methods
+
+are used
+
+but here we have another hard
+
+greedification problem because we have a
+
+centralized value function from which we
+
+need to derive decentralized policies
+
+so after critic methods can do that by
+
+having each actor independently update
+
+its policy by following a policy
+
+gradient estimated from the same
+
+centralized critic which is what's shown
+
+in this figure
+
+however learning a centralized value
+
+function over a complex action space can
+
+be challenging
+
+so a crucial idea to address this is to
+
+learn factored value functions instead
+
+so factor value functions have a long
+
+history in reinforcement learning and an
+
+even longer one in decision theoretic
+
+planning
+
+the idea is to represent the value
+
+function as a sum of local value
+
+functions each of which depends on the
+
+observed actions and observations of
+
+only a subset of the agents
+
+so this can be modeled in a coordination
+
+graph which is just a factor graph where
+
+the factors are the local value
+
+functions and the variables of the
+
+agents
+
+just like a probabilistic graphical
+
+model
+
+a coordination graph captures
+
+conditional independence properties
+
+so here for example agent 1 if agent 1
+
+knows the action of agent 2 it can
+
+select its own action without carrying
+
+what agent 3 does
+
+so such a factorization reduces the
+
+number of parameters to be learned
+
+thereby speeding learning and improving
+
+generalization
+
+it also makes it tractable to maximize
+
+over the join action space since your
+
+favorite message passing algorithms for
+
+performing map inference in
+
+probabilistic graphical models can be
+
+reused to efficiently find the
+
+maximizing join action
+
+um now as is often the case deepmind was
+
+the first to deep learnify this idea in
+
+an approach that they call value
+
+decomposition networks
+
+so vdn uses the most extreme form of um
+
+the most extreme form of factorization
+
+with um one factor per agent yielding
+
+this disconnected factor graph
+
+um
+
+now while this is obviously a highly
+
+restrictive factorization
+
+it has an important side effect of
+
+enabling a total decentralization of the
+
+max and arg max
+
+because each factor involves only one
+
+agent we can compute the max over joint
+
+actions by just performing a max over
+
+each agent's individual action space
+
+independently and then summing them
+
+similarly we can compute the global arg
+
+max by performing a separate arg max for
+
+each agent and then compiling the
+
+resulting actions into a vector
+
+what this means is that in a vdn
+
+factorization we no longer have a hard
+
+greedification problem
+
+finding the greedy action with respect
+
+to a value function is easy again so we
+
+are no longer compelled to take an
+
+active approach we can just use q
+
+learning
+
+so here we have a dqn loss function
+
+where the q function is centralized
+
+thanks to the vdn factorization this
+
+maximization can be formed performed
+
+efficiently and on deployment action
+
+selection trivially decentralizes since
+
+it requires only the decentralized arc
+
+max that i just discussed
+
+so this brings us at last to qmix which
+
+is a method that we developed a few
+
+years ago and that has proved quite
+
+useful in practice in this setting
+
+the main idea was to try to preserve
+
+this handy property of decentralizing
+
+the arcmax
+
+while loosening the restrictive
+
+representation imposed by vdn's extreme
+
+factorization
+
+so we can do that by leveraging the
+
+simple observation that to preserve the
+
+decentralizability of the arc max
+
+it suffices to enforce the condition
+
+that for all agents the partial
+
+derivative of the joint value function
+
+with respect to that agent's individual
+
+value function is non-negative
+
+now one potential source of confusion
+
+here is that because we're considering
+
+discrete action spaces
+
+these individual q values are only
+
+defined for a set of discrete points
+
+so what does it even mean to take the
+
+derivative with respect to it
+
+so this figure illustrates what's really
+
+happening
+
+when we compute the centralized value
+
+function from the individual values we
+
+do so using a mixing function which we
+
+can think of as taking real valued
+
+continuous inputs
+
+so the color gradient shown here shows a
+
+mixing function that obeys the
+
+monotonicity constraint i just discussed
+
+it's this mixing function whose partial
+
+derivatives must be non-negative in
+
+order to obey the monotonicity
+
+constraint
+
+in vdn the mixing function is just a
+
+summation but the point is that any
+
+monotonic function will do
+
+of course in practice the monotonic
+
+function is only ever supplied with the
+
+discrete set of inputs corresponding to
+
+the individual q values for each agent's
+
+action
+
+which thanks to the monotonicity
+
+constraint can be individually maximized
+
+over
+
+okay so
+
+when the students in my lab first
+
+pitched this idea to me i was pretty
+
+skeptical in fact i was convinced it
+
+would never work
+
+my reasoning was that if you preserve
+
+the decentralizability of the argmax
+
+then you are still saddled with the key
+
+limitation of edn which is that it can't
+
+represent the benefit of coordination
+
+by definition if each agent can select
+
+an action in a vacuum then there won't
+
+be any benefit to coordinating with
+
+other agents
+
+so this point is illustrated with the
+
+normal form gains shown here
+
+so on the left we have a game whose
+
+value function is both linear and
+
+monotonic
+
+so both vdn and qmix can represent it
+
+in the middle we have a game that is
+
+non-linear but still monotonic
+
+so qmix can represent this but vdn
+
+cannot
+
+and on the right you have a game that is
+
+both non-linear and non-monotonic so
+
+neither vdn nor qmix can represent it
+
+and my point was that only the game on
+
+the right involves coordination because
+
+only there does one agent's choice
+
+depend on the other agent's choice
+
+so the question then becomes should we
+
+care about these gains in the middle
+
+because it's these games that qmix can
+
+represent better than vdn
+
+and my claim was
+
+not really because even if vdn couldn't
+
+represent the games in the middle
+
+exactly it could still approximate it
+
+with a value function from the left game
+
+and when we perform greedy action
+
+selection we would get exactly the same
+
+results as we would with qmix
+
+um so i thought that was a pretty good
+
+argument but
+
+the students had an insight that i had
+
+overlooked
+
+and their point was that the value
+
+function is not just used for action
+
+selection it's also used for
+
+bootstrapping
+
+so the loss is a mean squared error
+
+between the q value and a target
+
+and that target
+
+is computed by bootstrapping off the q
+
+value in the next state as shown in red
+
+so even if a monotonic mixing function
+
+doesn't select different actions than a
+
+linear mixing function in a given state
+
+it can better estimate the value at that
+
+state which results in less
+
+bootstrapping error and better action
+
+selection in earlier states
+
+so
+
+this is a two-step game that illustrates
+
+this point
+
+so in the first step the red
+
+agent action is irrelevant and the blue
+
+agent action determines whether in the
+
+second step they go to state 2a or 2b
+
+in 2a the payoff is 7 regardless of
+
+their actions
+
+while in 2b the payoff is 8 but only if
+
+they select the right action
+
+so let's see what happens when we apply
+
+vdn and qmix to this game
+
+vdn can accurately represent the value
+
+of 2a but not 2b
+
+in 2b it correctly identifies the best
+
+action but underestimates its value
+
+crucially
+
+these errors in 2b propagate back via
+
+bootstrapping to result in errors in the
+
+value function in the first step
+
+leading the blue agent to sub optimally
+
+choose to transition to 2a
+
+by contrast qmix can represent both 2a
+
+and 2b correctly which via bootstrapping
+
+leads to lower error in the value
+
+function in the first step and so the
+
+blue agent optimally chooses to
+
+transition to 2b
+
+okay
+
+so how do we actually enforce the
+
+monotonicity constraint
+
+qmix does this by using three networks
+
+an agent network a mixing network and a
+
+hyper network
+
+the middle part of this figure shows the
+
+basic setup the agent networks which
+
+share parameters produce the individual
+
+q values
+
+these are then fed into the mixing
+
+network which is constrained to have
+
+non-negative weights to ensure
+
+monotonicity
+
+and produces the joint q value
+
+on the right we have a closer look at
+
+the agent network which is just a
+
+conventional deep network with feed
+
+forward and recurrent layers
+
+on the left we have a closer look at the
+
+mixing network whose weights are not
+
+learned directly but instead specified
+
+as the output of a separate hyper
+
+network that conditions not only on the
+
+individual q values but on the global
+
+state
+
+which is allowed because we only use the
+
+mixing network in the training phase
+
+the reason for the hyper networks is to
+
+allow the value function to more
+
+flexibly condition on this global state
+
+without the mixing network the
+
+relationship between the state and the
+
+value would have to be not monotonic
+
+because of the non-negative weights
+
+with a hyper network qmix can in
+
+principle specify an arbitrarily
+
+different mixing function for every
+
+state
+
+and then in the execution phase we
+
+discard the mixing network and each
+
+agent selects actions greedily with
+
+respect to its individual q values which
+
+thanks to the monotonicity constraint is
+
+guaranteed to maximize the joint q
+
+function
+
+okay
+
+so now in these plots we see the max
+
+over the estimated q values of nine
+
+random matrix games for both qmix and
+
+vdn
+
+compared to the true max shown in the
+
+dashed line
+
+and these plots show essentially that
+
+the students were right
+
+qmix is consistently better than vdn at
+
+approximating the max over the q values
+
+and this is the quantity that in a
+
+sequential setting would be used for
+
+bootstrapping
+
+of course that's just a sanity check so
+
+for a proper evaluation of qmix we use
+
+the starcraft multi-agent challenge or
+
+smac which is a suite of cooperative
+
+multi-agent rl benchmarks that we
+
+created based on the popular real-time
+
+strategy game starcraft 2.
+
+as we know from supervised learning and
+
+from single-agent reinforcement learning
+
+good benchmarks are really important for
+
+driving progress
+
+so that's why we created smack and open
+
+sourced it along with pymoral which is a
+
+software engineering framework that
+
+includes
+
+implementations of our other key moral
+
+algorithms um
+
+now in starcraft human players compete
+
+against each other or against the game
+
+ai to gather resources build armies
+
+and buildings and defeat opponents
+
+um
+
+now you've probably heard about alpha
+
+star which is deepmind starcraft playing
+
+agent um it also uses starcraft 2 but
+
+the setting is actually only
+
+superficially similar to smack
+
+alphastar considers the full game uh
+
+with a centralized policy and a single
+
+puppeteer agent that directs all the
+
+units like in a multi-agent mvp
+
+but it also has competitive aspects
+
+because it uses self-play techniques to
+
+train against like a suite of evolving
+
+opponents
+
+in smack we're trying to benchmark deck
+
+palm dps so we consider only a
+
+micromanagement in starcraft the fine
+
+grain control of individual units
+
+and the setting is fully cooperative
+
+because we fixed the opponent's ai the
+
+opponent's policy to that of the game ai
+
+and most importantly there's no
+
+puppeteer but instead each unit is
+
+controlled by a separate agent
+
+now as we know to be truly multi-agent
+
+we need partial observability which
+
+smack introduces by limiting the sight
+
+range of each agent as shown in a figure
+
+now smac consists of a number of
+
+different maps which are shown here we
+
+have symmetric maps where both teams
+
+have the same type and number of agents
+
+we have maps where both teams have the
+
+same type of agents but the opponent has
+
+more of them and we have asymmetric maps
+
+where the two teams have different types
+
+of agents
+
+um
+
+now in the original qmix paper we just
+
+reported results on a few maps but now
+
+that we have smack we can evaluate
+
+across 14 different maps i don't want to
+
+bore you with dozens of plots so i'll
+
+just show you this one sort of summary
+
+plot which shows the number of maps out
+
+of 14 for which each method has the best
+
+performing policy at each time during
+
+training
+
+and again the students were right qmix's
+
+richer mixing function really pays off
+
+the hump in the middle indicates that
+
+qmix tends to learn faster than the
+
+other methods
+
+well and while those other methods
+
+eventually catch up on a few maps the
+
+right part of the figure shows that qmix
+
+often learns substantially better final
+
+policies
+
+so notice that to have the best policy
+
+on a map we require it to be epsilon
+
+better than the alternative so even when
+
+qmix is not winning on a map that
+
+doesn't imply that it's losing typically
+
+it just means it's tying because there's
+
+there's some very difficult maps on
+
+which none of the methods make a lot of
+
+progress now the alternatives methods
+
+they include independent q learning and
+
+vdn as well as coma which is an actor
+
+critic method that we also developed
+
+um
+
+right
+
+um okay so let's take a closer look at
+
+uh the factors that contribute to qmix's
+
+performance
+
+so here are the results of some ablation
+
+experiments where we compare qmix to vdn
+
+and qmix ns in which the mixing function
+
+does not condition on a global state
+
+and vdns in which vdn includes a state
+
+dependent bias in its linear mixing
+
+so the plots show that the median test
+
+went percentage across independent runs
+
+for each method
+
+throughout training on three different
+
+maps
+
+so these results show that conditioning
+
+on the state is an important factor in
+
+performance at least on some maps and
+
+that doing so with a state dependent
+
+bias is not as good as the most flexible
+
+more flexible approach in qmix which
+
+involves a hypernet
+
+so here we have another ablation
+
+experiment where we compare qmix to qmix
+
+lin where the mixing function is
+
+restricted to be one linear layer
+
+and again we're plotting median testing
+
+percentage
+
+as expected um
+
+the original q mix with nonlinear mixing
+
+performs noticeably better
+
+okay
+
+but here's where things get weird
+
+if we actually look at the learned
+
+mixing functions they look very close to
+
+being linear
+
+we've done this analysis on a number of
+
+maps but i'm showing here an example on
+
+the two colossi 64 zergling maps because
+
+it's obviously easier to visualize when
+
+there are only two agents
+
+so the left shows the mixing function
+
+for the individual for the initial state
+
+and the right shows it for the state at
+
+time step 50.
+
+so um
+
+but what's going on here to figure it
+
+out we created yet another ablation that
+
+we call qmix2 lane
+
+which like qmix has two layers in its
+
+mixing function but like qmix lin has
+
+only linear layers
+
+now your machine learning textbook will
+
+tell you that putting linear layers on
+
+top of each other won't increase
+
+representational capacity because a
+
+linear combination of linear functions
+
+is still just a linear function
+
+however what your textbook won't mention
+
+but is probably obvious to any deep
+
+learning practitioner is that adding
+
+such layers can greatly affect the
+
+learning dynamics often favorably
+
+so that's what's illustrated in this
+
+plot this is not actually an rl
+
+experiment it's just a regression task
+
+of predicting fixed q values so the y
+
+axis is just a mean squared error
+
+and you can see that
+
+q mix 2 lin learns much faster than q
+
+makes lin even though they both have
+
+linear mixing
+
+and it even matches the performance of q
+
+mix with nonlinear mixing
+
+and sure enough this result holds up in
+
+smack when we actually do rl
+
+so the performance of qmix and qmix lin
+
+are quite similar and substantially
+
+better than that of qmix lin when we
+
+again consider median test wing
+
+percentage
+
+now
+
+we can try to encourage qmix to learn
+
+nonlinear mixing functions by changing
+
+the activation function from elu to tan
+
+h
+
+and indeed we do see more non-linearity
+
+in the learned mixing functions as shown
+
+in the top here
+
+however as the bottom plots show the
+
+effect on performance is modest at best
+
+okay so the the takeaways from these
+
+experiments are
+
+value function factorization is highly
+
+effective in these tasks
+
+flexibly conditioning on the state not
+
+just using the state dependent bias is
+
+also
+
+important and it's important to richly
+
+parameterize the mixing function as vdn
+
+or even qmix with a single linear layer
+
+is not sufficient
+
+however much as we might wish it was
+
+otherwise nonlinear mixing does not seem
+
+to be important at least not in smack
+
+okay i'm going to turn it over to tabish
+
+now who's going to talk about
+
+some more recent developments and how we
+
+can make qmix even better
+
+thank you i'm just going to quickly
+
+share my slides
+
+cool i hope everyone can see that just
+
+fine and hear me
+
+[Music]
+
+yes
+
+okay
+
+good all right so revisiting a point
+
+that schmoed made earlier in the talk
+
+that the monotonic mixing of qmix cannot
+
+capture or represent coordination
+
+how important is this in general
+
+we've seen that in smack qmix performs
+
+really well despite this
+
+however what are the consequences of not
+
+being able to represent coordination
+
+within our q values
+
+and what i mean by representing
+
+coordination
+
+the ability to q values in which an
+
+agent's best action can depend on the
+
+actions of the other agents ashima
+
+mentioned before
+
+so overall we know that qmix cannot
+
+represent all possible joint action q
+
+values
+
+now this limitation
+
+can have quite catastrophic consequences
+
+in the following example from the qtram
+
+paper
+
+so on the left is a quite simple matrix
+
+game with two agents in three actions
+
+and we can see what qmix learns on the
+
+right
+
+fails to recover the correct arguments
+
+and severely underestimates the maximum
+
+q value in the top left
+
+now considering that the ability to
+
+recover the correct arc max and
+
+accurately estimate the maximum q value
+
+are crucial for q learning this suggests
+
+that maybe we should be at least a
+
+little bit worried about this sort of
+
+thing
+
+but how worried should we be can we
+
+simply rectify all of this by using a
+
+bigger network a fancy optimizer smart
+
+learning wage for instance
+
+and the answer is is no
+
+so this limitation is a cause for
+
+concern because it really is a
+
+fundamental part of qmix
+
+and it arises as a consequence of the
+
+factorization that we deliberately chose
+
+to use
+
+this fundamental part this is important
+
+because this limitation is really baked
+
+deep into the algorithm
+
+we cannot get around it by using bigger
+
+networks more training more compute
+
+cumic simply cannot represent or join
+
+action queue
+
+let's try and understand what is going
+
+wrong in some more detail
+
+so what we want to do is we want to try
+
+and pinpoint exactly where q mix fails
+
+so we can think about how to improve it
+
+and so to do so let's consider an
+
+idealized version of qmix in the form of
+
+an operator
+
+we're interested in this idealized
+
+version specifically because we want to
+
+try and isolate these fundamental parts
+
+of qmix
+
+and by taking an operator outlook we can
+
+sidestep all issues of exploration
+
+compute architectures and general deep
+
+learning function approximation hardness
+
+now our operator tqmix here
+
+we define as the composition of the
+
+standard bellman optimality operator and
+
+our tumic specific projection operator
+
+so essentially we first compute the
+
+targets and then we project them into
+
+the space of joint action key values
+
+that qmix can represent
+
+and then our important projection
+
+operator is shown at the bottom here
+
+and we define it as the q in the space
+
+of things that cubics can represent
+
+that minimizes the squared loss with our
+
+target q values that we're trying to
+
+represent
+
+so in the setup the projection operator
+
+is really the important thing that's
+
+actually specific to qmix
+
+and if we try and think about what the
+
+projection is doing we can see that it
+
+is weighting the errors for all the
+
+joint actions equally
+
+and hence for this matrix game we end up
+
+misrepresenting the q value for the
+
+optimal action in the top left
+
+and what this tells us at least for this
+
+very specific and very helpful example
+
+is that under this setup it's more
+
+important to get the q values for the
+
+bad minus 12 entries correct as opposed
+
+to being correct by the optimal action's
+
+q value
+
+and this is all because there are more
+
+of these minus 12s and ultimately this
+
+projection is only interested in the
+
+total square error
+
+so hypothetically
+
+what would happen if we knew the optimal
+
+joint action and we only considered its
+
+error in our projection
+
+[Music]
+
+so for a single joint action
+
+the representational limitations of two
+
+mix they really have no effect and so
+
+we're able to correctly estimate the q
+
+value with no problem
+
+in general though
+
+we won't know the optimal joint action
+
+and we're going to need to be estimating
+
+the q values for all of these joint
+
+actions in some manner anyway
+
+now ideally we want to learn q values
+
+for the other joint actions that aren't
+
+going to impact our optimal joint
+
+actions due value and that are hopefully
+
+reasonably correct in some way
+
+so based on that intuition
+
+let's let's introduce a weighting
+
+function into our objective so we can
+
+adjust how important the error is for
+
+specific joint actions
+
+so in our projection
+
+this means that we introduce a function
+
+w it's quite simply like this
+
+how importantly
+
+this weighting only changes the q values
+
+that are returned from our projection
+
+operator we're still operating within
+
+the same class of joint action q we're
+
+still restricted by what qmix can
+
+represent
+
+however by introducing this weighting
+
+we can change the queue that we do learn
+
+so that they have better properties
+
+the two important ones being that the
+
+correct arc max is returned and the
+
+correct maximum q value is learned
+
+so we considered two different weighting
+
+functions which aim to try and place a
+
+larger weighting on the better joint
+
+actions
+
+the first shown here is the idealized
+
+central weighting which is not a
+
+practical weighting since it requires
+
+access to the true arc max which we
+
+don't have
+
+we put a weight of one on the true
+
+optimal joint action and a smaller
+
+weight alpha on everything else
+
+now of course if we already knew the old
+
+max we wouldn't need to bother with all
+
+of this but this is really just meant as
+
+a tool for theoretical analysis and in
+
+our experiments we approximated
+
+appropriately
+
+the second weighting is the optimistic
+
+weighting which is very nice and easy to
+
+use in experiments
+
+but perhaps isn't as obviously correct
+
+as it a previous weighting
+
+so if q mixes key value q taught here is
+
+lower than the target we're trying to
+
+represent then we use a high weighting
+
+of one
+
+if our estimate is overestimating our
+
+target and we use a smaller weight of
+
+alpha
+
+so in the paper we proved that both
+
+these recover the correct arg max and
+
+also the correct maximum q value for
+
+sufficiently small alpha so that's nice
+
+now that we've covered the weighting we
+
+can describe weighted gimmicks as a
+
+whole
+
+and their three main components to it
+
+the first our q mix of q values q top
+
+and this these ultimately produce our
+
+decentralized agents and allow us to
+
+efficiently maximize by proposing the
+
+arc max action
+
+the second is the weighted loss which
+
+we've argued is important for changing
+
+the q values that q mix learns in order
+
+to ensure we can actually recover the
+
+correct arg max and the correct maximum
+
+key value
+
+and finally the last component which we
+
+haven't mentioned yet is the centralized
+
+unrestricted q value estimates that we
+
+also learn
+
+now the idea behind this
+
+is that we want to learn accurate q
+
+values without worrying about how the
+
+weighting is affecting the quality of
+
+your the quality of our estimates
+
+especially as training progresses
+
+and perhaps we can actually learn more
+
+accurate q values if we're not
+
+restricted in the structure of our queue
+
+ultimately these are just used to
+
+estimate q values for the joint actions
+
+that are proposed by qmix
+
+so all of this theoretical work what's
+
+nice in providing a firm theoretical
+
+foundation to build on is ultimately
+
+just meant to serve as inspiration or a
+
+guide towards building our d-pyral
+
+algorithm
+
+ultimately we are interested in the deep
+
+mile setting on improving performance
+
+there
+
+so how can we realize where did qmix in
+
+practice
+
+and the diagram at the top
+
+is the way to be implemented and tested
+
+in a paper
+
+it shows how we compute our targets the
+
+yi
+
+and the two loss functions used to train
+
+q mixes q values and our centralized q
+
+values
+
+and in particular our centralized queue
+
+has the exact same structure as q mix
+
+but it features a simple feed forward
+
+network instead of any hyper networks or
+
+anything more complex like that
+
+and importantly here only qmix has the
+
+weighting applied to its loss function
+
+now i mentioned earlier that the
+
+idealized central weighting needs to be
+
+approximated and in the bottom left is
+
+how we do so
+
+so we give it high weighting if the
+
+action is the current arc max that qmix
+
+suggests
+
+or if its target is greater than our
+
+centralized q estimate
+
+so in essence we're trying to
+
+approximate if we think this is the
+
+correct optimal action
+
+for the optimistic weighting on the
+
+right um we can use it pretty much as is
+
+if q mixes q value q taught is less than
+
+its target then we just give it a high
+
+waiting otherwise we give it a low
+
+waiting as before
+
+now an interesting thing to touch upon
+
+is the similarities that weighted qmix
+
+bears to an off policy active critic
+
+setup
+
+so the actor is qmix's greedy
+
+deterministic policy shown here
+
+and the critic is the centralized q
+
+values that we also learn
+
+so weighted q mix then trains our
+
+centralized critic to estimate the q
+
+values of this deterministic policy
+
+this can also be thought of as an
+
+approximation to q learning since our
+
+policy is approximately arg maxing
+
+centralized q values
+
+and a big difference between weighted q
+
+mix and other similar actor critic
+
+algorithms like m a d dpg or a
+
+multi-agent version of sac is in how the
+
+actors are trained
+
+whether tomx trains them indirectly
+
+through a weighted q learning loss that
+
+we described earlier whereas maddbg uses
+
+a deterministic policy gradient theorem
+
+so
+
+before we come to the results i'll just
+
+briefly outline some of the baselines
+
+that we consider
+
+so due to the connections we just talked
+
+about we compared to maddpg and a
+
+multi-agent version of sac
+
+now importantly
+
+these implementations that we use are
+
+designed to be as close to weighted
+
+queue mix as possible
+
+with the only real difference being in
+
+how the actors are trained so the
+
+weighted q learning loss versus the
+
+policy gradient loss
+
+teacher plan is another very relevant
+
+baseline which also has some quite
+
+interesting links to weighted humans
+
+specifically you can view qtran as
+
+specific choices of the three components
+
+of weighted qmix
+
+so qtart is learned through vdn and
+
+instead of qmix and the weighting
+
+function of utrecht iron is really quite
+
+different to what we use
+
+and finally another very important basis
+
+line is tuplex which i'll very briefly
+
+outline
+
+and the important thing about cupelex is
+
+that it can theoretically represent all
+
+joint action q values so it doesn't have
+
+any representational constraints like
+
+qmix or vdn do
+
+but crucially it does this whilst
+
+maintaining the same consistency that
+
+vdn and qmix do so it's really easy to
+
+augment and get the correct optimal
+
+joint action for qplex and at the same
+
+time you're not restricted in what you
+
+can represent
+
+so theoretically it ticks all the boxes
+
+and it's fantastic
+
+so after all that um
+
+looking at the weightings and everything
+
+was any of the weighted gimmick stuff
+
+actually useful or helpful to our final
+
+performance
+
+and i think it was um
+
+especially in the sorts of scenarios in
+
+which qmix and related methods fail
+
+because of these representational
+
+constraints
+
+this is one such scenario a predator
+
+protest in which the agents are punished
+
+for not coordinating when trying to
+
+capture a prey
+
+so in the setting
+
+you need two agents to try and attempt
+
+capture at exactly the same time step
+
+otherwise there's a punishment for
+
+miscoordination
+
+so weighted q mix solves the task quite
+
+easily um shown at the top here in
+
+purple and blue
+
+cwq mix and ow chemicals representing
+
+the two different weightings
+
+now in contrast uh qmix and vdn which
+
+isn't shown here completely fail because
+
+they just cannot represent these kind of
+
+q values in which there's a significant
+
+punishment for missed coordination
+
+also quite interestingly uh tuplex fails
+
+on this task as well
+
+indicating that whilst it can
+
+theoretically represent or join actually
+
+q it might struggle to learn some of
+
+them in practice
+
+the other important class of baselines
+
+are the active critical approaches
+
+maddpg and the multi-asian stack which
+
+also fail here
+
+and mtdpg having a lot of variants um so
+
+you can see a lot of bread
+
+and
+
+you know this really suggests that
+
+there's certainly a lot of room for
+
+improvement in these policy gradient
+
+methods
+
+and if you're interested um we have some
+
+recent work on this a factorized variant
+
+of mddpg which we call fact bank
+
+and finally um to wrap up the baselines
+
+uh q train also performs quite well here
+
+suggesting that some kind of weighting
+
+is really quite helpful and useful in
+
+these sort of tasks
+
+now one important aspect of weighted
+
+gear mix which we haven't really focused
+
+on
+
+is the way that it separates the q
+
+values that qmix learns from the data
+
+that it's being trained on
+
+so in a deep url setting qmix has an
+
+implicit waiting function which is based
+
+on the data gathered by the behavioral
+
+policy
+
+so what qmix learns can be quite
+
+sensitive to the type and the extent of
+
+expiration that is being performed so
+
+the more you take random actions the
+
+closer you might be to a uniform waiting
+
+for instance which can lead to bad
+
+results that would as we've seen
+
+[Music]
+
+however where the cue mix through the
+
+weighting aims to separate what is
+
+learned from the specific data that is
+
+being trained on
+
+now ideally our weighting should enable
+
+us to learn in perhaps unfavorable
+
+situations where playing teammates would
+
+fail
+
+one such example
+
+the point um i want to try and make in
+
+this slide is that the implicit
+
+weighting determined by your behavioral
+
+policy is quite a hard thing to control
+
+whereas the explicit weighting that
+
+weighted gimmicks uses is very much in
+
+your control you have complete control
+
+over it um
+
+and this you know lets you have a lot
+
+more flexibility in how you do your
+
+learning and ultimately can lead to much
+
+better results
+
+so we test this by increasing the amount
+
+of expiration that we performed
+
+shown here are the results for a spec
+
+map uh free s550
+
+in which the express in which the extra
+
+expiration is really unnecessary for all
+
+the methods
+
+so what we're looking to see is how well
+
+each method is able to utilize the data
+
+gathered by their very exploratory
+
+behavioral policies
+
+really how robust they are to an
+
+increased level of exploration that
+
+isn't necessarily this kind of task
+
+and we can see that weighted qmix does
+
+much better in the scenario in qmix in
+
+dealing with more exploration in the
+
+setup
+
+which is nice
+
+and good to see and validate some of our
+
+hypotheses
+
+and some other scenarios um such as this
+
+map 6h versus 8 said the additional
+
+expiration can be extremely helpful
+
+importantly though
+
+you need to be able to take advantage of
+
+it
+
+and so here we test weighted gimmicks
+
+and qmix with two different epsilon
+
+schedules
+
+so the solid lines are with an increased
+
+level of expiration the dashed lines
+
+which you can just about make out right
+
+near the bottom are with a small level
+
+of expiration
+
+and we can see that ultimately the more
+
+exploratory epsilon schedules lead to
+
+better performance
+
+but in the scenario only weighted qmix
+
+is able to take advantage of its
+
+expiration and learn some good policies
+
+whereas qmix is unable to make progress
+
+on this task and actually the more
+
+expiration it used um worse it seemed to
+
+do because it's a solid zero right at
+
+the bottom there
+
+now of course um it's not all sunshine
+
+and rainbows uh weighted q mix
+
+introduces additional complexity over
+
+cue mix which can be quite detrimental
+
+sometimes
+
+we have this entire other model we now
+
+need to worry about centralized queue
+
+and we also have this waiting function
+
+which we need to choose and potentially
+
+tune sensibly as
+
+well and we can see that in some harder
+
+scenarios
+
+corridor from smack shown here we can
+
+have regressions in performance compared
+
+to the simple black umics
+
+so this map is often used to test the
+
+exploratory capability of the agents
+
+because otherwise it's quite difficult
+
+to learn a good strategy a good policy
+
+if you're not doing enough exploration
+
+so compared to the other scenario even
+
+though more exploration is being done
+
+whether qmix isn't able to take
+
+advantage of the expert exploration it's
+
+not able to learn good policy whereas
+
+q-mixes
+
+so in the last couple of slides we
+
+looked at some of the results we had in
+
+the paper but there are more if you're
+
+interested
+
+and so
+
+kind of thinking about future directions
+
+for research one big area for potential
+
+improvement is the weighting function
+
+that we use
+
+there's absolutely no reason we need to
+
+limit ourselves to a binary weighting
+
+and i'm absolutely sure there are better
+
+waiting functions out there that are
+
+perhaps designed more specifically with
+
+our deep learning setup in mind
+
+another big area that we essentially
+
+know is a bottleneck is the architecture
+
+for the centralized queue
+
+so under hardware maps and scenarios its
+
+extra flexibility seems to be holding
+
+performance back and instead and we
+
+should try and leverage it its extra
+
+flexibility and turn it into a big
+
+benefit strength of the method
+
+now finally an interesting question i've
+
+been thinking a little bit about is why
+
+something like cuplex fails in our
+
+particular predatory task
+
+because theoretically duplex can
+
+represent all joint action q and so it
+
+shouldn't have any issues stemming from
+
+representational constraints
+
+but empirically at least in this task it
+
+really struggles to take advantage of
+
+that
+
+so here are a list of the papers that we
+
+focused on during this talk um first of
+
+all the original cumix paper which was
+
+published icml in 2018 so my first paper
+
+um i learned a huge amount from everyone
+
+as part of going through experience
+
+which was absolutely invaluable
+
+we later expanded on the results for
+
+much more detailed analysis and the
+
+results from the smack benchmark as
+
+shimon talked about earlier this was
+
+published in jimlo
+
+and finally i've been presenting some
+
+results from the weighted humidity paper
+
+which was at europe's last year in 2020
+
+and all of the code for these papers is
+
+available if you're interested in the
+
+setting and in particular i think it's
+
+relatively quick to get up and running
+
+and doing research
+
+um because with open source primal and
+
+many other papers and relevant methods
+
+also make use of pymar so it's quite
+
+easy to get the code and the official
+
+implementations of the methods and
+
+really streamline your research
+
+so to conclude uh we presented gimmicks
+
+a simple effective value function
+
+factorization method for deep mile
+
+our experimental results strongly
+
+suggest that the factorization is
+
+crucial to good performance
+
+however the key values that you mix
+
+learned can sometimes be inaccurate or
+
+unhelpful
+
+but we can remedy this by introducing a
+
+weighting function into our loss in
+
+order to change the approximation that
+
+qmix makes thank you
+
+okay uh are we going back to shimon or
+
+are you guys uh finished with your talk
+
+oh we're finished now all right okay
+
+thank you very much for your talk yeah
+
+very interesting thank you both for
+
+shinwan tavish so we've got some time
+
+for questions and um
+
+i i'm seeing some hands up already
+
+if you don't mind i just wanted to
+
+quickly follow up with the question just
+
+to break the ice i guess shimon you had
+
+on your slight 22 i think um
+
+a
+
+like an overall plot that had a bump and
+
+then went down again right
+
+um
+
+you don't have to bring it up again i
+
+guess but you said something that
+
+confused me you said um
+
+so you said it learns faster in the bump
+
+but then in the end we can see that it
+
+ultimately learns better policies than
+
+the other algorithms but
+
+the trend of
+
+i mean it was a complete uh downward
+
+gradient in the trend right so there was
+
+no convergence visible at all in
+
+in that line
+
+how come you made that conclusion from
+
+the downwards trend
+
+so the um
+
+the y-axis on that plot
+
+is not absolute performance it's the
+
+it's the
+
+number of maps out of 14 maps that qmix
+
+had in a policy that was significantly
+
+better than that of the other methods
+
+okay i see that wasn't clear to me but
+
+still with the downward trend it looked
+
+like that uh portion would continue to
+
+go down right without reaching
+
+well what am i missing here
+
+so by the time you get to the right
+
+point of the plot all of the methods
+
+have plateaued
+
+ah okay
+
+there shouldn't be any more order
+
+changes
+
+the hump in the middle indicates that
+
+like
+
+some of the early benefit is just due to
+
+learning faster
+
+and then when you come down the hill the
+
+the the
+
+advantage that remains over the other
+
+methods that's that's um a difference in
+
+final performance
+
+okay cool
+
+right then um that was just my quick
+
+question i think i'll uh
+
+i'm seeing some
+
+[Music]
+
+i saw some hands up but no the hands up
+
+are gone
+
+so uh am i seeing one here
+
+uh samuel garcia you can just uh meet
+
+yourself and go out with the question
+
+okay
+
+we can type the question in the chat if
+
+that's easy
+
+okay while he's uh while he's doing that
+
+maybe i use the opportunity to do
+
+something else so
+
+yeah this is very nice work and um it's
+
+great that you guys are sharing the code
+
+we recently had a paper
+
+accepted in the
+
+europe's 21 benchmark um
+
+track where we release an extended
+
+version of your pymar code base and i
+
+just wanted to share this with you use
+
+this for the benchmark to ensure that
+
+the
+
+algorithms were all consistently
+
+implemented and
+
+we added tweaks to
+
+how you can do parameter sharing
+
+and i'm sharing just the archive here so
+
+you guys can have a look and let us know
+
+what you think of this e-primer which
+
+builds on your primer so question now
+
+has arrived here
+
+um
+
+i was wondering if he had compared to
+
+performance in terms of wall clock time
+
+since the weighted q mix introduces
+
+additional computational complexity
+
+yeah i bet you want to take that one
+
+yeah i guess i can take this um
+
+so i don't think we made any explicit
+
+wall clock time um comparisons
+
+um in terms of how much far more slower
+
+it runs it's a little bit slower but um
+
+since we're using relatively small
+
+networks and i guess relatively small
+
+batch sizes
+
+everything gets batched onto the gpu
+
+anyway and
+
+it's it's not really too much of a
+
+bottleneck um
+
+but yeah it is a little bit slower but
+
+not significantly so
+
+okay we have another question here
+
+thanks for the talk
+
+towards the end of the slide strabish
+
+you started talking about waiting
+
+functions and how those could be further
+
+explored did you comment further with
+
+ideas you had on that
+
+yep um
+
+so i guess i don't have any super
+
+concrete ideas about how to uh extend
+
+them um
+
+i guess maybe one
+
+you know maybe slightly obvious thing is
+
+just to
+
+have a weighting that changes depending
+
+on how good a joint action is
+
+so if we decide to give a smaller
+
+weighting to some joint actions we don't
+
+need that to be the same across all of
+
+them so for example the very worst joint
+
+action we can give a tiny weighting
+
+maybe the second best joint action we
+
+can give a reasonably large weighting
+
+and we can try and vary them dynamically
+
+in some way
+
+okay
+
+any more questions
+
+i actually wanted to i wanted to follow
+
+up with the walkway clock question
+
+because i think that's important and i'm
+
+wondering what your thoughts are so what
+
+i frequently see in the dprl literature
+
+is that people make tweaks
+
+by adding complexity
+
+but the limit performance is not
+
+affected compared to other baselines you
+
+typically just
+
+achieve an improvement in transient
+
+performance which
+
+you know is labeled as better sample
+
+efficiency or something like that
+
+and then i wonder often with these spots
+
+that we see right um there's a new
+
+tweaked algorithm that's more complex
+
+gets quicker to a better like to
+
+convergence
+
+but the baselines achieved that as well
+
+so one plot that you showed was i think
+
+where you showed your weighted q mix and
+
+then there was q tran and they had to
+
+seem to achieve the same limit
+
+performance
+
+but what i wonder with these plots
+
+sometimes is if you swapped
+
+the x axis from time steps to one clock
+
+time
+
+i wonder if the ordering would swap
+
+because it depends on what your
+
+complexities in these algorithms right
+
+and how expensive it is to push through
+
+the gradients and whatnot
+
+so you can still make a case that sample
+
+efficiency is important in some cases
+
+like robotics where experiences are very
+
+hard to come by right but in other
+
+environments for example a pure
+
+simulation environment where the
+
+simulator perhaps isn't the bottleneck
+
+then i think wall clock time is
+
+ultimately the thing we care about
+
+because we only have 10 hours budget to
+
+train something or you know something
+
+like that in an industrial setting
+
+what's your take on that and what would
+
+you recommend to sort of address that in
+
+in research
+
+um i can take this one
+
+um so
+
+i guess for that specific plot um since
+
+qtran is quite similar to the way that
+
+qmix the computational complexity ends
+
+up being more or less the same you're
+
+still learning a centralized cues level
+
+waiting slugging actors
+
+um
+
+and i guess for me i tend to focus on
+
+the sample efficiency since uh
+
+i'm quite interested in say expiration
+
+and that sort of thing
+
+but if you're really interested in the
+
+war clock time of your experiments then
+
+there's certainly a lot of things you
+
+can do to improve that um
+
+so one thing in particular is just to
+
+use a bunch of environments in parallel
+
+in order to gather experience um and
+
+then do your training after that um you
+
+can get huge huge speed ups in terms of
+
+wall clock time if you do that
+
+and that really dwarfs any of the sort
+
+of
+
+slice known slight slowness in some of
+
+the methods um
+
+you can train
+
+maybe
+
+almost as fast as some actor critic
+
+methods things like como or central v
+
+um just by you know carrying a lot more
+
+experiences in parallel
+
+if you're interested in more cloud time
+
+okay i think i'm seeing another hand up
+
+here by a user called refp rafpai you
+
+can just uh mute yourself and go out
+
+with a question
+
+uh hi thank you and thank you for your
+
+presentation it was very insightful
+
+uh
+
+so in in your last slide there's an open
+
+question saying that the studies suggest
+
+that
+
+the factorization is crucial
+
+but that there's this paper also coming
+
+from oxford called
+
+is independent learning all you need in
+
+starcraft
+
+and i was wondering so
+
+do you think that
+
+it is more important to to use
+
+independent learning in in further
+
+studies to solve starcraft environments
+
+or do you still uh
+
+do you are you still in favor of using
+
+uh centralized training decentralized
+
+execution approaches
+
+like the ones that you have been
+
+discussing
+
+so uh let me say something about that
+
+and then tabish can add his own thoughts
+
+um so so first of all just to clarify
+
+whether it's independent learning or not
+
+it's still the same setting right the
+
+centralized training of decentralized
+
+execution that's like a problem setting
+
+that imposes certain rules
+
+you can approach that problem setting
+
+with independent learning or with other
+
+learning algorithms
+
+um the sort of like cartoon version of
+
+the history of this field is it like the
+
+actor critic methods were proposed first
+
+um
+
+then they were greatly outperformed by
+
+the q learning based methods like vdn
+
+and qmix and then recently
+
+ppo versions of the actor critic methods
+
+have been investigated and have upended
+
+that ranking so actor critic methods are
+
+like competitive again for the first
+
+time
+
+um in the in the space of those ppo
+
+based actor critic methods it doesn't
+
+seem like centralization of the critic
+
+is an important factor
+
+so there's this like ippo independent
+
+ppo and there's um m-a-p-p-o
+
+which is which uses a centralized critic
+
+and they as far as we can tell perform
+
+very similarly
+
+so the crucial factor there seems to be
+
+um
+
+the
+
+like the
+
+the trust region constraint which is uh
+
+uh approximately enforced in ppo methods
+
+that seems to be crucial to making actor
+
+critic methods work a lot better and
+
+making them competitive with q learning
+
+methods uh at least on the actor critics
+
+side that seems to be by far the the
+
+dominant factor
+
+tavis do you want to add anything
+
+yeah i think a lot of these recent ppo
+
+algorithms have some really strong
+
+performance
+
+[Music]
+
+but i guess in terms of the question is
+
+independent or learning all you need um
+
+sometimes it's not um and it's a maps
+
+where perhaps things like bdn and cubics
+
+do really well
+
+they sort of do really badly um for
+
+reasons that we maybe don't quite know
+
+yet
+
+um but also um
+
+in terms of the implementation details
+
+and
+
+the sort of difficulty in getting some
+
+of these activities methods to work um
+
+there do seem to be a lot more
+
+considerations you need to take into
+
+account um when you're doing your
+
+learning so something to keep in mind in
+
+terms of the simplicity of relative
+
+methods
+
+thank you
+
+thanks have a question from
+
+ian sheridan if you want to go ahead
+
+hi uh hello um shimon and tabish very
+
+interesting uh important work so well
+
+done keep it up um i have a quick
+
+question for tabish
+
+so
+
+sometimes ignorance may
+
+reveal reveal some innovation so you
+
+just have to bear with me so
+
+why is starcraft used what what's the
+
+background to why you use that as a
+
+benchmark
+
+um so i guess from my perspective it's i
+
+think it's really important to have a
+
+deep rl benchmark in the deep mile
+
+setting um
+
+since a lot of our work sort of focuses
+
+on matrix games and grid world tasks
+
+which are really important um but i
+
+think it's really nice to have a
+
+benchmark that people widely use that
+
+does sort of test and stress the
+
+scalability of algorithms and we can see
+
+that things like say qtran which do
+
+really well in simple matrix games or
+
+predator prey tasks don't quite scale up
+
+in their performance um when you
+
+increase the complexity of the task
+
+so starcraft was kind of a nice
+
+candidate for
+
+building out a set of nice deck prompt
+
+benchmarks for this
+
+but just two quick
+
+ideas i'm just floating ideas this is
+
+obviously
+
+the
+
+the purpose of this forum in part so
+
+firstly is that you could produce your
+
+own game particularly you as you know
+
+you're they're the cutting edge
+
+originality you you know oxford yourself
+
+with others you could quickly put
+
+together
+
+a game that there may be some advantage
+
+to that because you absolutely know
+
+everything about how that works in
+
+effect you know you've built the
+
+laboratory rather than going to someone
+
+else so i think that could be important
+
+and the second thing which i did mention
+
+before so excuse if i'm banging the drum
+
+but
+
+i think sport is really ripe for you
+
+guys to look at from a scientific
+
+mathematical point of view you think
+
+about this most professional sport
+
+hockey sevens rugby cricket the players
+
+they they are almost robotic
+
+in the sense that they've got to be you
+
+know it's it's five meters not six
+
+meters they have their positioning is
+
+absolutely fundamental that that's one
+
+of the key difference between
+
+professional sportsmen and even semi pro
+
+so you you could get a lot of benefit
+
+from looking at sport to see
+
+where there are these real well-known
+
+mathematical formulae and and from that
+
+i think
+
+you could gain a great deal so just just
+
+those two two thoughts out there i look
+
+forward to seeing your game and also you
+
+know
+
+to have a really good look at how humans
+
+at top end are working and and how that
+
+can fit in with what you're doing
+
+um so just a comment about that
+
+inventing your own domain
+
+um i think it's kind of a double-edged
+
+sword
+
+uh so it gives you a lot more control
+
+and it can facilitate kind of like
+
+careful experimental analysis
+
+um that might be harder with more of a
+
+black box environment
+
+but the danger i think is that you're
+
+kind of grading your own homework uh you
+
+might be implicitly creating domains
+
+that favor your methods um and you know
+
+i wouldn't call starcraft like the real
+
+world by any means but the fact that it
+
+was a game that existed before we came
+
+along and decided to do rl on this topic
+
+and that people played the game and it
+
+mattered to people actually out there in
+
+the real world that i think makes it
+
+much more significant to make progress
+
+on it
+
+and to ensure that we're building
+
+something that actually has some
+
+connection to stuff that people care
+
+about
+
+um in the real world in terms of sports
+
+i totally agree with you and i think
+
+this is the you know the motivation
+
+behind robocup which for decades has
+
+focused on you know of
+
+getting both machine learning and
+
+robotic solutions to
+
+to football um and there are some recent
+
+efforts from google on this they have
+
+something called google football um
+
+html i'm conscious of mr albrecht's time
+
+here so um consider this you've got this
+
+wonderful forum uh um with touring and
+
+all these other universities i'm
+
+listening to what you're saying yes you
+
+don't actually don't want it to be
+
+authored by oxford that would be marking
+
+your own work but there's no reason why
+
+you can't have an open source
+
+piece of a game that very quickly
+
+probably marries more and i guess just
+
+floating ideas marries more with
+
+industry and that's why five aside
+
+football or maybe some
+
+known robotics game might might uh help
+
+but i certainly yeah collectively you
+
+might be able to produce something that
+
+yeah it could be a lot more transparent
+
+and illuminating because everyone knows
+
+exactly what's in it and of course you
+
+produced it yourselves as a collective
+
+if it comes from industry i totally
+
+agree um but it's not just about oxford
+
+it's academics in general uh we there's
+
+we run a risk of just chasing our own
+
+tails
+
+so there's value in external in in
+
+external domains but yeah in
+
+collaboration with industry is a great
+
+way to achieve that
+
+okay thanks
+
+are there any last questions before we
+
+wrap up
+
+i don't see any hands
+
+i think uh so with that um yeah i think
+
+we can wrap up so thank you very much
+
+again shimon and tabish for your time
+
+today and for everyone else for
+
+attending we've got a range more talks
+
+coming up for the rest of the year and
+
+already some talks scheduled early next
+
+year but if you have a lab in the uk and
+
+you'd like to speak in the series please
+
+please reach out to myself and to mike
+
+woodridge and we try to slot you in
+
+would probably be closer to the summer
+
+next year then
+
+okay and that's it thank you very much
+
+again everyone see you around thanks
+
+stefano thank you
+
